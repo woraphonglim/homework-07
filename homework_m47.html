@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>การบ้าน ม.4/7</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #f0f2f8; --surface: #ffffff; --surface2: #f7f8fc; --border: #e4e7f0;
+  --primary: #4f46e5; --primary-light: #eef2ff; --primary-dark: #3730a3;
+  --text: #1e2235; --text-muted: #6b7280; --text-light: #9ca3af;
+  --success: #059669; --success-light: #d1fae5;
+  --warning: #d97706; --warning-light: #fef3c7;
+  --danger: #dc2626; --danger-light: #fee2e2;
+  --amber: #f59e0b; --amber-light: #fffbeb;
+  --radius: 14px; --radius-sm: 8px;
+  --shadow: 0 1px 3px rgba(0,0,0,.07), 0 4px 16px rgba(79,70,229,.06);
+  --shadow-lg: 0 8px 32px rgba(79,70,229,.12);
+}
+body { font-family: 'Sarabun', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; font-size: 15px; line-height: 1.6; }
+
+/* LOGIN */
+#login-page { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 24px; background: linear-gradient(135deg,#e0e7ff 0%,#f0f2f8 50%,#ede9fe 100%); }
+.login-card { background: var(--surface); border-radius: 24px; padding: 40px 36px; width: 100%; max-width: 380px; box-shadow: var(--shadow-lg); border: 1px solid var(--border); animation: slideUp .35s cubic-bezier(.22,.68,0,1.2) both; }
+.login-logo { width: 52px; height: 52px; background: var(--primary); border-radius: 14px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 22px; }
+.login-card h1 { text-align: center; font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+.login-card p { text-align: center; color: var(--text-muted); font-size: 13px; margin-bottom: 28px; }
+.field { margin-bottom: 14px; }
+.field label { display: block; font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 6px; }
+.field input { width: 100%; padding: 12px 16px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-family: inherit; font-size: 15px; background: var(--surface2); transition: border-color .15s, box-shadow .15s; outline: none; }
+.field input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79,70,229,.12); background: #fff; }
+.btn-primary { width: 100%; padding: 13px; background: var(--primary); color: #fff; border: none; border-radius: var(--radius-sm); font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer; transition: background .15s, transform .1s; margin-top: 6px; box-shadow: 0 2px 8px rgba(79,70,229,.3); }
+.btn-primary:hover { background: var(--primary-dark); }
+.btn-primary:active { transform: scale(.98); }
+
+/* DASHBOARD */
+#dashboard-page { padding: 20px; max-width: 1000px; margin: 0 auto; }
+.topbar { display: flex; align-items: center; justify-content: space-between; background: var(--surface); border-radius: var(--radius); padding: 16px 20px; box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 16px; animation: slideDown .3s ease both; flex-wrap: wrap; gap: 10px; }
+.topbar-left { display: flex; align-items: center; gap: 12px; }
+.topbar-right { display: flex; align-items: center; gap: 8px; }
+.avatar { width: 42px; height: 42px; border-radius: 12px; background: var(--primary-light); color: var(--primary); font-weight: 700; font-size: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.user-name { font-weight: 700; font-size: 15px; }
+.user-role { font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--primary); background: var(--primary-light); padding: 2px 8px; border-radius: 99px; display: inline-block; margin-top: 2px; }
+.user-role.head { color: #7c3aed; background: #ede9fe; }
+.user-role.student { color: var(--text-muted); background: var(--surface2); }
+.btn-logout { padding: 8px 16px; border-radius: var(--radius-sm); background: var(--danger-light); color: var(--danger); border: none; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
+.btn-logout:hover { background: #fecaca; }
+.btn-change-pw { padding: 8px 16px; border-radius: var(--radius-sm); background: var(--surface2); color: var(--text-muted); border: 1px solid var(--border); font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
+.btn-change-pw:hover { background: var(--border); }
+
+/* STATS */
+.stats-bar { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 16px; animation: slideDown .35s ease .05s both; }
+.stat-card { background: var(--surface); border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow); border: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
+.stat-icon { font-size: 22px; }
+.stat-num { font-size: 24px; font-weight: 700; line-height: 1; }
+.stat-label { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+/* POST FORM */
+.post-card { background: var(--surface); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 16px; animation: slideDown .35s ease .1s both; }
+.section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--text-muted); margin-bottom: 14px; }
+.form-grid { display: grid; grid-template-columns: 1fr 2fr 1fr; gap: 10px; }
+.form-grid input { padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-family: inherit; font-size: 14px; background: var(--surface2); outline: none; transition: border-color .15s; }
+.form-grid input:focus { border-color: var(--primary); background: #fff; }
+.btn-post { margin-top: 10px; padding: 10px 24px; background: var(--primary); color: #fff; border: none; border-radius: var(--radius-sm); font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer; }
+.btn-post:hover { background: var(--primary-dark); }
+
+/* TOOLBAR */
+.toolbar { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; animation: slideDown .35s ease .15s both; }
+.search-wrap { flex: 1; min-width: 180px; position: relative; }
+.search-wrap input { width: 100%; padding: 10px 14px 10px 38px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-family: inherit; font-size: 14px; background: var(--surface); outline: none; transition: border-color .15s; }
+.search-wrap input:focus { border-color: var(--primary); }
+.search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-light); pointer-events: none; }
+.filter-select { padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-family: inherit; font-size: 14px; background: var(--surface); outline: none; cursor: pointer; color: var(--text); min-width: 130px; }
+
+/* TABLE */
+.table-card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); overflow: hidden; animation: slideDown .35s ease .2s both; }
+.table-scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; min-width: 620px; }
+thead th { padding: 12px 16px; text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--text-muted); background: var(--surface2); border-bottom: 1px solid var(--border); }
+tbody tr { border-bottom: 1px solid var(--border); transition: background .1s; }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: var(--surface2); }
+td { padding: 14px 16px; font-size: 14px; vertical-align: middle; }
+.td-subject { font-weight: 700; font-size: 14px; }
+.td-detail { color: var(--text-muted); font-size: 13px; max-width: 180px; }
+
+/* BADGES */
+.deadline-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 99px; font-size: 12px; font-weight: 600; }
+.deadline-ok { background: var(--success-light); color: var(--success); }
+.deadline-soon { background: var(--warning-light); color: var(--warning); }
+.deadline-late { background: var(--danger-light); color: var(--danger); }
+.status-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 99px; font-size: 12px; font-weight: 600; }
+.status-approved { background: var(--success-light); color: var(--success); }
+.status-pending { background: var(--amber-light); color: var(--amber); }
+tr.row-urgent { background: #fff8f8 !important; }
+tr.row-urgent:hover { background: #fff0f0 !important; }
+.not-submitted-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--danger); margin-right: 4px; animation: pulse 1.5s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.4)} }
+
+/* ACTION BUTTONS */
+.btn-action { padding: 6px 12px; border-radius: 6px; border: none; font-family: inherit; font-size: 12px; font-weight: 600; cursor: pointer; transition: background .12s, transform .08s; margin-left: 4px; }
+.btn-action:active { transform: scale(.95); }
+.btn-done { background: var(--amber-light); color: var(--amber); }
+.btn-done:hover { background: #fde68a; }
+.btn-submit { background: var(--primary-light); color: var(--primary); }
+.btn-submit:hover { background: #c7d2fe; }
+.btn-approve { background: var(--success-light); color: var(--success); }
+.btn-approve:hover { background: #a7f3d0; }
+.btn-del { background: var(--danger-light); color: var(--danger); }
+.btn-del:hover { background: #fca5a5; }
+.btn-list { background: var(--surface2); color: var(--text-muted); border: 1px solid var(--border); }
+.btn-list:hover { background: var(--border); }
+
+/* MODAL */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(15,20,40,.45); backdrop-filter: blur(4px); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
+.modal-overlay.open { display: flex; }
+.modal { background: var(--surface); border-radius: 20px; padding: 28px; width: 100%; max-width: 440px; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,.2); animation: slideUp .25s cubic-bezier(.22,.68,0,1.2) both; }
+.modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+.modal-header h3 { font-size: 16px; font-weight: 700; }
+.modal-close { width: 32px; height: 32px; border-radius: 8px; border: none; background: var(--surface2); cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); }
+.modal-close:hover { background: var(--border); }
+.modal-meta { font-size: 12px; color: var(--text-muted); margin-bottom: 16px; }
+.student-list { list-style: none; }
+.student-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+.student-item:last-child { border-bottom: none; }
+.student-num { width: 26px; height: 26px; border-radius: 6px; background: var(--success-light); color: var(--success); font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.empty-modal { text-align: center; color: var(--text-muted); padding: 32px 0; font-size: 14px; }
+
+/* CHANGE PASSWORD MODAL */
+.pw-field { margin-bottom: 14px; }
+.pw-field label { display: block; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
+.pw-field input { width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-family: inherit; font-size: 14px; outline: none; }
+.pw-field input:focus { border-color: var(--primary); }
+.btn-save-pw { width: 100%; padding: 11px; background: var(--primary); color: #fff; border: none; border-radius: var(--radius-sm); font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 4px; }
+.btn-save-pw:hover { background: var(--primary-dark); }
+
+/* TOAST */
+#toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--text); color: #fff; padding: 12px 24px; border-radius: 99px; font-size: 14px; font-weight: 500; z-index: 200; transition: transform .25s cubic-bezier(.22,.68,0,1.2); white-space: nowrap; }
+#toast.show { transform: translateX(-50%) translateY(0); }
+
+/* LOADING */
+#loading-overlay { position: fixed; inset: 0; background: rgba(240,242,248,.9); display: flex; align-items: center; justify-content: center; z-index: 300; flex-direction: column; gap: 16px; }
+.spinner { width: 36px; height: 36px; border: 3px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin .7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.empty-state { text-align: center; padding: 48px 24px; color: var(--text-muted); }
+.empty-state .empty-icon { font-size: 36px; margin-bottom: 12px; }
+.empty-state p { font-size: 14px; }
+
+@keyframes slideUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+@keyframes slideDown { from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:translateY(0)} }
+
+@media (max-width: 640px) {
+  #dashboard-page { padding: 12px; }
+  .stats-bar { grid-template-columns: 1fr 1fr; }
+  .stats-bar .stat-card:last-child { grid-column: span 2; }
+  .form-grid { grid-template-columns: 1fr; }
+}
+.hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<div id="loading-overlay" style="position:fixed;inset:0;background:rgba(240,242,248,.95);display:flex;align-items:center;justify-content:center;z-index:300;flex-direction:column;gap:16px;">
+  <div class="spinner"></div>
+  <div style="color:var(--text-muted);font-size:14px;">กำลังเชื่อมต่อ Firebase...</div>
+</div>
+
+<div id="login-page" class="hidden">
+  <div class="login-card">
+    <div class="login-logo">📚</div>
+    <h1>ระบบการบ้าน ม.4/7</h1>
+    <p>เข้าสู่ระบบด้วยรหัสนักเรียน</p>
+    <div class="field">
+      <label>รหัสนักเรียน</label>
+      <input type="text" id="student-id" placeholder="เช่น 690778" autocomplete="username">
+    </div>
+    <div class="field">
+      <label>รหัสผ่าน</label>
+      <input type="password" id="student-pass" placeholder="••••••" autocomplete="current-password"
+             onkeydown="if(event.key==='Enter') handleLogin()">
+    </div>
+    <button class="btn-primary" onclick="handleLogin()">เข้าสู่ระบบ</button>
+  </div>
+</div>
+
+<div id="dashboard-page" class="hidden">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="avatar" id="user-avatar"></div>
+      <div>
+        <div class="user-name" id="user-display-name"></div>
+        <span class="user-role" id="user-display-role"></span>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <button class="btn-change-pw" onclick="openChangePw()">🔑 เปลี่ยนรหัสผ่าน</button>
+      <button class="btn-logout" onclick="handleLogout()">ออกจากระบบ</button>
+    </div>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat-card"><div class="stat-icon">📋</div><div><div class="stat-num" id="stat-total">0</div><div class="stat-label">การบ้านทั้งหมด</div></div></div>
+    <div class="stat-card"><div class="stat-icon">✅</div><div><div class="stat-num" id="stat-done">0</div><div class="stat-label">ส่งแล้ว</div></div></div>
+    <div class="stat-card"><div class="stat-icon">⏳</div><div><div class="stat-num" id="stat-pending">0</div><div class="stat-label">ยังไม่ส่ง</div></div></div>
+  </div>
+
+  <div class="post-card" id="management-section">
+    <div class="section-title" id="post-section-title">โพสต์การบ้านใหม่</div>
+    <div class="form-grid">
+      <input type="text" id="hw-subject" placeholder="ชื่อวิชา เช่น คณิตศาสตร์">
+      <input type="text" id="hw-detail" placeholder="รายละเอียดการบ้าน">
+      <input type="date" id="hw-deadline">
+    </div>
+    <button class="btn-post" onclick="createNewHomework()">➕ เพิ่มการบ้าน</button>
+  </div>
+
+  <div class="toolbar">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="search-input" placeholder="ค้นหาการบ้าน..." oninput="renderTable()">
+    </div>
+    <select class="filter-select" id="filter-subject" onchange="renderTable()">
+      <option value="">ทุกวิชา</option>
+    </select>
+    <select class="filter-select" id="filter-status" onchange="renderTable()">
+      <option value="">ทุกสถานะ</option>
+      <option value="submitted">ส่งแล้ว</option>
+      <option value="not_submitted">ยังไม่ส่ง</option>
+    </select>
+  </div>
+
+  <div class="table-card">
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>วิชา</th><th>รายละเอียด</th><th>กำหนดส่ง</th>
+            <th>ผู้ส่ง</th><th>สถานะ</th><th style="text-align:right">จัดการ</th>
+          </tr>
+        </thead>
+        <tbody id="homework-table-body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modal-title">รายชื่อที่ส่งแล้ว</h3>
+      <button class="modal-close" onclick="closeModalDirect()">✕</button>
+    </div>
+    <div class="modal-meta" id="modal-meta"></div>
+    <ul class="student-list" id="modal-list"></ul>
+  </div>
+</div>
+
+<div class="modal-overlay" id="pw-modal-overlay" onclick="closePwModal(event)">
+  <div class="modal" style="max-width:360px">
+    <div class="modal-header">
+      <h3>เปลี่ยนรหัสผ่าน</h3>
+      <button class="modal-close" onclick="closePwModalDirect()">✕</button>
+    </div>
+    <div class="pw-field">
+      <label>รหัสผ่านปัจจุบัน</label>
+      <input type="password" id="pw-current" placeholder="••••••">
+    </div>
+    <div class="pw-field">
+      <label>รหัสผ่านใหม่ (อย่างน้อย 6 ตัว)</label>
+      <input type="password" id="pw-new" placeholder="••••••">
+    </div>
+    <div class="pw-field">
+      <label>ยืนยันรหัสผ่านใหม่</label>
+      <input type="password" id="pw-confirm" placeholder="••••••">
+    </div>
+    <button class="btn-save-pw" onclick="changePassword()">บันทึกรหัสผ่านใหม่</button>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics.js";
+import { getFirestore, collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAMzniv3wA-HeXiIx99MvceU9KMZsjKge4",
+  authDomain: "room7-homework.firebaseapp.com",
+  projectId: "room7-homework",
+  storageBucket: "room7-homework.firebasestorage.app",
+  messagingSenderId: "440635727558",
+  appId: "1:440635727558:web:557e0e639b3b759b2441c7",
+  measurementId: "G-GFPJBZFGS2"
+};
+
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const db = getFirestore(app);
+
+// ── STUDENT DATABASE ──
+const STUDENT_DATABASE = {
+  "690736": { title:"นาย",    fname:"กฤติน",        lname:"ทองทา",             no:"1",  role:"head" },
+  "690737": { title:"นางสาว", fname:"กวินธิดา",     lname:"นักค้า",            no:"2",  role:"student" },
+  "690738": { title:"นาย",    fname:"กันต์ธัช",     lname:"สุขะ",              no:"3",  role:"student" },
+  "690742": { title:"นาย",    fname:"ซอดิ๊ค",       lname:"ตติยะภูรี",        no:"4",  role:"student" },
+  "690743": { title:"นางสาว", fname:"ญาณิพัชญ์",    lname:"หัสดี",             no:"5",  role:"student" },
+  "690744": { title:"นาย",    fname:"ณฐกฤช",        lname:"ผดุงนึก",           no:"6",  role:"student" },
+  "690745": { title:"นาย",    fname:"ณัชฐปกรณ์",    lname:"รินชุมภู",          no:"7",  role:"student" },
+  "690747": { title:"นางสาว", fname:"ดนยา",         lname:"กนกศีชริน",        no:"8",  role:"student" },
+  "690750": { title:"นาย",    fname:"ธนโชติ",       lname:"นาคน้ำ",            no:"9",  role:"student" },
+  "690754": { title:"นาย",    fname:"ธีธัช",        lname:"ศรีรุวัฒน์",        no:"10", role:"student" },
+  "690759": { title:"นาย",    fname:"ปภินวิช",      lname:"ศิรินาม",           no:"11", role:"student" },
+  "690762": { title:"นาย",    fname:"ปรัตถกร",      lname:"เซโตะ",             no:"12", role:"student" },
+  "690764": { title:"นางสาว", fname:"ปวันรัตน์",    lname:"อุรุทิศ",           no:"13", role:"student" },
+  "690771": { title:"นาย",    fname:"ภัทรพล",       lname:"สุรินทร์",          no:"14", role:"student" },
+  "690773": { title:"นาย",    fname:"ภิชญะ",        lname:"ตั้งใจรักษา",       no:"15", role:"student" },
+  "690774": { title:"นาย",    fname:"ภูดิศ",        lname:"ประชาสิทธิศักดิ์",  no:"16", role:"student" },
+  "690775": { title:"นาย",    fname:"เมธาสิทธิ์",   lname:"ปินทะนา",           no:"17", role:"student" },
+  "690776": { title:"นาย",    fname:"โรเบิร์ต กาย", lname:"ทอมเบอลิน",         no:"18", role:"student" },
+  "690777": { title:"นาย",    fname:"วงศ์ศพัทธ์",   lname:"อินอ่อน",           no:"19", role:"student" },
+  "690778": { title:"นาย",    fname:"วรพงศ์",       lname:"ลิ้มจำรูญรัตน์",    no:"20", role:"admin" },
+  "690779": { title:"นางสาว", fname:"วริศรา",       lname:"เจริญผล",           no:"21", role:"student" },
+  "690783": { title:"นาย",    fname:"เศรษฐ์ภวิศ",   lname:"กุลสิทธิ์",         no:"22", role:"student" },
+  "690784": { title:"นาย",    fname:"สถิตเทพ",      lname:"มุ้งทอง",           no:"23", role:"student" },
+  "690786": { title:"นาย",    fname:"สรรภพ",        lname:"คำพิงชัย",          no:"24", role:"student" },
+  "690787": { title:"นาย",    fname:"สิรภพ",        lname:"กันธิยะ",           no:"25", role:"student" },
+  "690789": { title:"นางสาว", fname:"สุธนี",        lname:"ใจมา",              no:"26", role:"student" },
+  "690790": { title:"นางสาว", fname:"สุประวีญาภรณ์",lname:"ศักดิ์ศรี",         no:"27", role:"student" },
+  "690792": { title:"นางสาว", fname:"อรกัญญา",      lname:"อุดมความสุข",       no:"28", role:"student" },
+  "690793": { title:"นาย",    fname:"อัครวิช",      lname:"คำวัง",             no:"29", role:"student" },
+  "690794": { title:"นางสาว", fname:"อาพิรัตยา",    lname:"ปีบ้านใหม่",        no:"30", role:"head" }
+};
+
+// ── STATE ──
+let activeUser = null;
+let homeworkList = [];
+let unsubscribe = null;
+
+// ── INIT ──
+window.addEventListener('load', async () => {
+  try {
+    await seedPasswords();
+  } catch(e) { console.warn(e); }
+  
+  const saved = sessionStorage.getItem("m4_7_user");
+  if (saved) {
+    try {
+      activeUser = JSON.parse(saved);
+      showDashboard();
+    } catch(e) {
+      sessionStorage.removeItem("m4_7_user");
+      hideLoading();
+      document.getElementById("login-page").classList.remove("hidden");
+    }
+  } else {
+    hideLoading();
+    document.getElementById("login-page").classList.remove("hidden");
+  }
+});
+
+async function seedPasswords() {
+  // Only seed if a user doesn't already have a password doc
+  // We check one representative user
+  try {
+    const ref = doc(db, "users_auth", "690736");
+    const snap = await getDoc(ref);
+    if (!snap.exists()) {
+      // seed all
+      const batch = [];
+      for (const [id] of Object.entries(STUDENT_DATABASE)) {
+        batch.push(setDoc(doc(db, "users_auth", id), { password: id }, { merge: true }));
+      }
+      await Promise.all(batch);
+    }
+  } catch(e) { console.warn("seed error", e); }
+}
+
+// ── AUTH ──
+window.handleLogin = async function() {
+  const id   = document.getElementById("student-id").value.trim();
+  const pass = document.getElementById("student-pass").value.trim();
+  if (!STUDENT_DATABASE[id]) { showToast("ไม่พบรหัสนักเรียนนี้ ❌"); return; }
+  showLoading("กำลังตรวจสอบ...");
+  try {
+    const snap = await getDoc(doc(db, "users_auth", id));
+    const storedPw = snap.exists() ? snap.data().password : id;
+    if (pass === storedPw) {
+      activeUser = { id, ...STUDENT_DATABASE[id] };
+      sessionStorage.setItem("m4_7_user", JSON.stringify(activeUser));
+      showDashboard();
+    } else {
+      hideLoading();
+      showToast("รหัสผ่านไม่ถูกต้อง ❌");
+    }
+  } catch(e) {
+    hideLoading();
+    showToast("เชื่อมต่อ Firebase ไม่ได้ ❌");
+    console.error(e);
+  }
+};
+
+window.handleLogout = function() {
+  if (unsubscribe) unsubscribe();
+  sessionStorage.removeItem("m4_7_user");
+  location.reload();
+};
+
+// ── CHANGE PASSWORD ──
+window.openChangePw = function() {
+  document.getElementById("pw-current").value = "";
+  document.getElementById("pw-new").value = "";
+  document.getElementById("pw-confirm").value = "";
+  document.getElementById("pw-modal-overlay").classList.add("open");
+};
+window.closePwModal = function(e) { if (e.target === document.getElementById("pw-modal-overlay")) closePwModalDirect(); };
+window.closePwModalDirect = function() { document.getElementById("pw-modal-overlay").classList.remove("open"); };
+
+window.changePassword = async function() {
+  const cur     = document.getElementById("pw-current").value.trim();
+  const newPw   = document.getElementById("pw-new").value.trim();
+  const confirm = document.getElementById("pw-confirm").value.trim();
+  if (!cur || !newPw || !confirm) { showToast("กรอกข้อมูลให้ครบ ⚠️"); return; }
+  if (newPw.length < 6) { showToast("รหัสผ่านใหม่ต้องมีอย่างน้อย 6 ตัว"); return; }
+  if (newPw !== confirm) { showToast("รหัสผ่านใหม่ไม่ตรงกัน ❌"); return; }
+  showLoading("กำลังบันทึก...");
+  try {
+    const snap = await getDoc(doc(db, "users_auth", activeUser.id));
+    const storedPw = snap.exists() ? snap.data().password : activeUser.id;
+    if (cur !== storedPw) { hideLoading(); showToast("รหัสผ่านปัจจุบันไม่ถูกต้อง ❌"); return; }
+    await setDoc(doc(db, "users_auth", activeUser.id), { password: newPw });
+    hideLoading();
+    closePwModalDirect();
+    showToast("เปลี่ยนรหัสผ่านแล้ว ✅");
+  } catch(e) { hideLoading(); showToast("เกิดข้อผิดพลาด ❌"); console.error(e); }
+};
+
+// ── DASHBOARD ──
+function showDashboard() {
+  document.getElementById("login-page").classList.add("hidden");
+  document.getElementById("dashboard-page").classList.remove("hidden");
+
+  document.getElementById("user-avatar").textContent = activeUser.fname.charAt(0);
+  document.getElementById("user-display-name").textContent = `${activeUser.fname} ${activeUser.lname}`;
+  const roleEl = document.getElementById("user-display-role");
+  const roleLabel = { admin:"Admin", head:"Head", student:"นักเรียน" };
+  roleEl.textContent = roleLabel[activeUser.role] || activeUser.role;
+  roleEl.className = "user-role " + activeUser.role;
+
+  // ทุกคนโพสต์ได้ แต่ label ต่างกัน
+  const isPriv = isAdmin();
+  document.getElementById("post-section-title").textContent =
+    isPriv ? "โพสต์การบ้านใหม่" : "แจ้งการบ้าน (รอ admin อนุมัติ)";
+
+  const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate()+1);
+  document.getElementById("hw-deadline").value = tomorrow.toISOString().split("T")[0];
+
+  subscribeHomework();
+  hideLoading();
+}
+
+function isAdmin() { return activeUser && (activeUser.role === "admin" || activeUser.role === "head"); }
+
+// ── REALTIME LISTENER ──
+function subscribeHomework() {
+  if (unsubscribe) unsubscribe();
+  const q = query(collection(db, "homeworks"), orderBy("createdAt", "desc"));
+  unsubscribe = onSnapshot(q, snap => {
+    homeworkList = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    buildSubjectFilter();
+    renderTable();
+  }, err => { console.error(err); showToast("โหลดข้อมูลไม่ได้ ❌"); });
+}
+
+// ── CREATE ──
+window.createNewHomework = async function() {
+  const subject  = document.getElementById("hw-subject").value.trim();
+  const detail   = document.getElementById("hw-detail").value.trim();
+  const deadline = document.getElementById("hw-deadline").value;
+  if (!subject || !detail || !deadline) { showToast("กรอกข้อมูลให้ครบ ⚠️"); return; }
+  showLoading("กำลังบันทึก...");
+  try {
+    await addDoc(collection(db, "homeworks"), {
+      subject, detail, deadline,
+      status: isAdmin() ? "approved" : "pending",
+      authorId: activeUser.id,
+      authorName: `${activeUser.fname} ${activeUser.lname}`,
+      completedBy: [],
+      createdAt: Date.now()
+    });
+    document.getElementById("hw-subject").value = "";
+    document.getElementById("hw-detail").value = "";
+    hideLoading();
+    showToast(isAdmin() ? "เพิ่มการบ้านแล้ว ✅" : "ส่งรอการอนุมัติ ⏳");
+  } catch(e) { hideLoading(); showToast("บันทึกไม่ได้ ❌"); console.error(e); }
+};
+
+// ── RENDER ──
+window.renderTable = function() {
+  const tbody = document.getElementById("homework-table-body");
+  const search = document.getElementById("search-input").value.toLowerCase();
+  const filterSub = document.getElementById("filter-subject").value;
+  const filterStatus = document.getElementById("filter-status").value;
+  tbody.innerHTML = "";
+  const admin = isAdmin();
+  const today = new Date(); today.setHours(0,0,0,0);
+
+  let visible = homeworkList.filter(item => {
+    if (!admin && item.status === "pending" && item.authorId !== activeUser.id) return false;
+    if (filterSub && item.subject !== filterSub) return false;
+    if (search && !item.subject.toLowerCase().includes(search) && !item.detail.toLowerCase().includes(search)) return false;
+    const isDone = item.completedBy && item.completedBy.includes(activeUser.id);
+    if (filterStatus === "submitted" && !isDone) return false;
+    if (filterStatus === "not_submitted" && isDone) return false;
+    return true;
+  });
+
+  // stats over approved items visible to user
+  const myItems = homeworkList.filter(item => {
+    if (!admin && item.status === "pending" && item.authorId !== activeUser.id) return false;
+    return item.status === "approved";
+  });
+  const myDone = myItems.filter(i => i.completedBy && i.completedBy.includes(activeUser.id));
+  document.getElementById("stat-total").textContent = myItems.length;
+  document.getElementById("stat-done").textContent  = myDone.length;
+  document.getElementById("stat-pending").textContent = myItems.length - myDone.length;
+
+  if (visible.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">📭</div><p>ไม่มีการบ้านที่ตรงกัน</p></div></td></tr>`;
+    return;
+  }
+
+  visible.forEach(item => {
+    const isDone = item.completedBy && item.completedBy.includes(activeUser.id);
+    const count  = item.completedBy ? item.completedBy.length : 0;
+    const dl     = new Date(item.deadline + "T00:00:00");
+    const diffDays = Math.ceil((dl - today) / 86400000);
+    let dlClass = "deadline-ok", dlIcon = "📅";
+    if (diffDays < 0)      { dlClass = "deadline-late"; dlIcon = "🔴"; }
+    else if (diffDays <= 2){ dlClass = "deadline-soon"; dlIcon = "⚠️"; }
+    const isUrgent = !isDone && diffDays <= 1;
+    const daysText = diffDays < 0 ? `เกินกำหนด ${Math.abs(diffDays)} วัน`
+                   : diffDays === 0 ? "วันนี้!" : diffDays === 1 ? "พรุ่งนี้" : `อีก ${diffDays} วัน`;
+
+    const tr = document.createElement("tr");
+    if (isUrgent) tr.className = "row-urgent";
+    tr.innerHTML = `
+      <td class="td-subject">
+        ${!isDone && item.status==="approved" ? '<span class="not-submitted-dot"></span>' : ''}
+        ${item.subject}
+        ${item.status==="pending" && !admin ? ' <span style="font-size:11px;color:var(--amber);font-weight:600;">(รอ)</span>' : ''}
+      </td>
+      <td class="td-detail">${item.detail}</td>
+      <td>
+        <span class="deadline-badge ${dlClass}">${dlIcon} ${formatDate(item.deadline)}</span>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:3px;">${daysText}</div>
+      </td>
+      <td>
+        <button class="btn-action btn-list" onclick="showSubmittedModal('${item.id}')">👥 ${count} คน</button>
+      </td>
+      <td>
+        <span class="status-badge ${item.status==='approved'?'status-approved':'status-pending'}">
+          ${item.status==='approved'?'✓ อนุมัติ':'⏳ รอ'}
+        </span>
+      </td>
+      <td style="text-align:right;white-space:nowrap">
+        ${item.status==='approved' ? `<button class="btn-action ${isDone?'btn-done':'btn-submit'}" onclick="toggleDone('${item.id}')">${isDone?'✅ ส่งแล้ว':'ส่งงาน'}</button>` : ''}
+        ${(item.status==='pending' && admin) ? `<button class="btn-action btn-approve" onclick="approveHw('${item.id}')">อนุมัติ</button>` : ''}
+        ${(admin || item.authorId===activeUser.id) ? `<button class="btn-action btn-del" onclick="delHw('${item.id}')">ลบ</button>` : ''}
+      </td>`;
+    tbody.appendChild(tr);
+  });
+};
+
+// ── ACTIONS ──
+window.toggleDone = async function(id) {
+  const hw = homeworkList.find(h => h.id === id);
+  if (!hw) return;
+  const completedBy = hw.completedBy || [];
+  const idx = completedBy.indexOf(activeUser.id);
+  let updated;
+  if (idx > -1) { updated = completedBy.filter(x => x !== activeUser.id); showToast("ยกเลิกการส่งแล้ว"); }
+  else          { updated = [...completedBy, activeUser.id]; showToast("ส่งงานแล้ว ✅"); }
+  try { await updateDoc(doc(db, "homeworks", id), { completedBy: updated }); }
+  catch(e) { showToast("อัปเดตไม่ได้ ❌"); console.error(e); }
+};
+
+window.approveHw = async function(id) {
+  try { await updateDoc(doc(db, "homeworks", id), { status: "approved" }); showToast("อนุมัติแล้ว ✅"); }
+  catch(e) { showToast("เกิดข้อผิดพลาด ❌"); }
+};
+
+window.delHw = async function(id) {
+  if (!confirm("ลบการบ้านนี้ใช่ไหม?")) return;
+  try { await deleteDoc(doc(db, "homeworks", id)); showToast("ลบแล้ว"); }
+  catch(e) { showToast("ลบไม่ได้ ❌"); }
+};
+
+// ── MODAL: รายชื่อผู้ส่ง ──
+window.showSubmittedModal = function(id) {
+  const hw = homeworkList.find(h => h.id === id);
+  if (!hw) return;
+  document.getElementById("modal-title").textContent = `${hw.subject} — รายชื่อที่ส่งแล้ว`;
+  document.getElementById("modal-meta").textContent = `กำหนดส่ง: ${formatDate(hw.deadline)} · ส่งแล้ว ${hw.completedBy ? hw.completedBy.length : 0} คน`;
+  const list = document.getElementById("modal-list");
+  const submitted = hw.completedBy || [];
+  if (submitted.length === 0) {
+    list.innerHTML = `<li class="empty-modal">😴 ยังไม่มีใครส่งเลย</li>`;
+  } else {
+    // sort by student number
+    const sorted = [...submitted].sort((a,b) => {
+      const na = parseInt(STUDENT_DATABASE[a]?.no||999);
+      const nb = parseInt(STUDENT_DATABASE[b]?.no||999);
+      return na - nb;
+    });
+    list.innerHTML = sorted.map(sid => {
+      const s = STUDENT_DATABASE[sid];
+      if (!s) return "";
+      return `<li class="student-item"><div class="student-num">${s.no}</div><div>${s.title}${s.fname} ${s.lname}</div></li>`;
+    }).join("");
+  }
+  document.getElementById("modal-overlay").classList.add("open");
+};
+window.closeModal = function(e) { if (e.target===document.getElementById("modal-overlay")) closeModalDirect(); };
+window.closeModalDirect = function() { document.getElementById("modal-overlay").classList.remove("open"); };
+
+// ── FILTER ──
+function buildSubjectFilter() {
+  const sel = document.getElementById("filter-subject");
+  const cur = sel.value;
+  const subjects = [...new Set(homeworkList.map(h => h.subject))].sort();
+  sel.innerHTML = `<option value="">ทุกวิชา</option>` + subjects.map(s=>`<option value="${s}">${s}</option>`).join("");
+  if (subjects.includes(cur)) sel.value = cur;
+}
+
+// ── HELPERS ──
+function formatDate(str) {
+  if (!str) return "-";
+  return new Date(str+"T00:00:00").toLocaleDateString("th-TH",{day:"numeric",month:"short",year:"numeric"});
+}
+
+let toastTimer;
+window.showToast = function(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg; t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 2500);
+};
+
+function showLoading(msg) {
+  document.getElementById("loading-overlay").style.display = "flex";
+  document.getElementById("loading-overlay").querySelector("div:last-child").textContent = msg || "กำลังโหลด...";
+}
+function hideLoading() {
+  document.getElementById("loading-overlay").style.display = "none";
+}
+</script>
+</body>
+</html>
